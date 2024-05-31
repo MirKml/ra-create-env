@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run
-import { parseArgs } from "./deps.ts";
+import { parseArgs, existsSync } from "./deps.ts";
 
 function printHelp() {
   console.log(
@@ -14,8 +14,6 @@ function main() {
     string: ["artifacts-dir", "source-branch"],
   });
 
-  console.log(args);
-
   if (args.help) {
     printHelp();
     Deno.exit();
@@ -28,6 +26,10 @@ function main() {
   }
 
   const artifactsDir = args["artifacts-dir"];
+  if (!existsSync(artifactsDir, { isDirectory: true })) {
+    console.log(`error: directory ${artifactsDir} isn't accessible`)
+  }
+
   const sourceBranch = args["source-branch"];
 }
 
