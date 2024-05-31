@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run
+#!/usr/bin/env -S deno run --allow-read --allow-env
 import { parseArgs, existsSync } from "./deps.ts";
 
 function printHelp() {
@@ -28,6 +28,7 @@ function main() {
   const artifactsDir = args["artifacts-dir"];
   if (!existsSync(artifactsDir, { isDirectory: true })) {
     console.log(`error: directory ${artifactsDir} isn't accessible`)
+    Deno.exit(1);
   }
 
   const sourceBranch = args["source-branch"];
