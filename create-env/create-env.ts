@@ -21,7 +21,14 @@ function main() {
 
 async function transformFile(fileName: string) {
   const file = await Deno.open(fileName, { read: true });
-  file.readable.pipeThrough(new TextLineStream());
+  const readable = file.readable.pipeThrough(new TextDecoderStream())
+    .pipeThrough(new TextLineStream());
+
+  for await (const line of readable) {
+    console.log(line);
+  }
+
+  file.close();
 }
 
 main();
