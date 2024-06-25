@@ -1,23 +1,29 @@
 /// <reference types="npm:@types/node" />
 import { createWriteStream, readFileSync } from "node:fs";
 
-function envFileConvert( inputFileName: string, outputFileName: string, options: {},
+export function envFileConvert(
+  inputFileName: string,
+  outputFileName: string,
+  options: {},
 ) {
   const inputLines = readFileSync(inputFileName, "utf-8").split(/\r?\n/);
 
   const outputWriteStream = createWriteStream(outputFileName);
+  let hasWriteError = false;
   for (const line of inputLines) {
-    outputWriteStream.write(processLine(line), "utf8", (err: Error) => {
+    if (hasWriteError) {
+      break;
+    }
+
+    outputWriteStream.write(processLine(line), "utf8", (err) => {
       if (err) {
         console.error("Error writing to file:", err);
-      } else {
-        console.log("Data has been written to the file.");
-        outputWriteStream.end();
+        hasWriteError = true;
       }
     });
-
-    outputWriteStream.close();
   }
+
+  outputWriteStream.close();
 }
 
 function processLine(line: string) {
