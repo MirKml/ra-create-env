@@ -6,3 +6,6 @@ npm-debug.log*
 # Coverage directory used by tools like istanbul
 coverage
 *.lcov
+
+# npm transformation result
+env-file-convert/npm
