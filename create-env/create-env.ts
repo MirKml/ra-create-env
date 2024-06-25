@@ -1,5 +1,5 @@
-#!/usr/bin/env -S deno run --allow-read
-import { parseArgs, TextLineStream } from "./deps.ts";
+#!/usr/bin/env -S deno run --allow-read --allow-write
+import { parseArgs } from "./deps.ts";
 
 function printHelp() {
   console.log(
@@ -17,18 +17,29 @@ function main() {
     printHelp();
     Deno.exit();
   }
+
+  transformEnvFile("./env-template.ts", "./env.js");
 }
 
-async function transformFile(fileName: string) {
-  const file = await Deno.open(fileName, { read: true });
-  const readable = file.readable.pipeThrough(new TextDecoderStream())
-    .pipeThrough(new TextLineStream());
+async function transformEnvFile(inputFileName: string, outputFileName: string) {
+  const inputLines = Deno.readTextFileSync(inputFileName).split(/\r?\n/);
 
-  for await (const line of readable) {
-    console.log(line);
+  const outputFile = await Deno.open(outputFileName, {
+    create: true,
+    write: true,
+    truncate: true,
+  });
+  const outputWriter = outputFile.writable.getWriter();
+  const encoder = new TextEncoder();
+  for (const line of inputLines) {
+    outputWriter.write(encoder.encode(processLine(line)));
   }
+  outputWriter.close();
+}
 
-  file.close();
+function processLine(line: string) {
+  const outputLine = line.replace("<base_url>", "outputbaseurl");
+  return outputLine + "\n";
 }
 
 main();
