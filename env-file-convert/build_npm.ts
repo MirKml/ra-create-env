@@ -10,6 +10,8 @@ await build({
   },
   // no cjs/umd output, only esm
   scriptModule: false,
+  // typescript source also isn't important
+  skipSourceOutput: true,
   typeCheck: "single",
   package: {
     // package.json properties
