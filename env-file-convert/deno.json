@@ -1,5 +1,9 @@
 {
   "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.41.2"
+    "@deno/dnt": "jsr:@deno/dnt@^0.41.2",
+  },
+  "tasks": {
+    "cache-reload": "deno cache --reload mod.ts",
+    "build-npm": "deno run -A build_npm.ts 0.1.0"
   }
 }

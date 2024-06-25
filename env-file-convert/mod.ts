@@ -1,4 +1,4 @@
-/// <reference types="npm:@types/node" />
+// @deno-types="npm:@types/node"
 import { createWriteStream, readFileSync } from "node:fs";
 
 export function envFileConvert(
