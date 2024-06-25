@@ -7,7 +7,7 @@ await build({
   outDir: "./npm",
   shims: {
     // see JS docs for overview and more options
-    deno: "dev",
+    deno: "dev"
   },
   // no cjs/umd output, only esm
   scriptModule: false,
@@ -27,13 +27,13 @@ await build({
     },
     dependencies: {},
     devDependencies: {
-      "@types/node": "20.*"
+      "@types/node": "^20.*"
     }
   },
-  /*postBuild() {
+  postBuild() {
     // steps to run after building and before running the tests
-    Deno.copyFileSync("LICENSE", "npm/LICENSE");
-    Deno.copyFileSync("README.md", "npm/README.md");
+    //Deno.Command(copyFileSync("LICENSE", "npm/LICENSE");
+    //Deno.copyFileSync("README.md", "npm/README.md");
   },
-  */
 });
+
