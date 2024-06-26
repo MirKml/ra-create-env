@@ -45,8 +45,8 @@ function runCommand(command: string[], workDir: string) {
   let executedCommand: string;
   let args: string[];
   if (Deno.build.os === "windows") {
-    executedCommand = "cmd";
-    args = ["/c", ...command];
+    executedCommand = "powershell";
+    args = ["-Command", ...command];
   } else {
     [executedCommand, ...args] = command;
   }
@@ -66,9 +66,9 @@ function runCommand(command: string[], workDir: string) {
   return new TextDecoder().decode(output.stdout);
 }
 
-console.log("@types/node as devDependencies only");
+console.log("[after dnt] @types/node as devDependencies only");
 console.log(runCommand(["npm", "rm", "@types/node"], "./npm"));
 console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "./npm"));
 
-console.log("remove picocolors");
+console.log("[after dnt] remove picocolors");
 console.log(runCommand(["npm", "rm", "picocolors"], "./npm"));
