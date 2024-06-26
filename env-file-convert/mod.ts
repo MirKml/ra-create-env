@@ -40,6 +40,7 @@ function processLine(line: string, options: EnvOptions) {
     )
     .replace("<backend_build_info_url>", options.backendBuildInfoUrl || "")
     .replace("<app_config_url>", options.appConfigUrl || "");
+    .replace("<app_config_url>", options.appConfigUrl || "");
 
   return outputLine + "\n";
 }

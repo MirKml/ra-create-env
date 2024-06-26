@@ -19,6 +19,8 @@ export interface EnvOptions {
     /** optional backend build info, mostly for tests environments */
     backendBuildInfoUrl?: string;
 
+    enableTestBanner: boolean;
+
     /**
      * frontend application configuration url - config.json
      * it's obsolete, used only in dustbins
