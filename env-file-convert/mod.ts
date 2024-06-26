@@ -39,8 +39,8 @@ function processLine(line: string, options: EnvOptions) {
       options.identityServer.appAuthBaseUrl,
     )
     .replace("<backend_build_info_url>", options.backendBuildInfoUrl || "")
-    .replace("<app_config_url>", options.appConfigUrl || "");
-    .replace("<app_config_url>", options.appConfigUrl || "");
+    .replace("<app_config_url>", options.appConfigUrl || "")
+    .replace(/ENABLE_TEST_BANNER: [a-z]+/, "ENABLE_TEST_BANNER: " + options.enableTestBanner ? "true" : "false");
 
   return outputLine + "\n";
 }
@@ -54,3 +54,12 @@ function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
   options.identityServer.appAuthBaseUrl = options.baseUrl;
   return options;
 }
+
+function setOptionsbyCustomerLocal(options: EnvOptions, customer: string, moduleName: string) {
+  options.baseUrl = "/" + customer + "/Modules/" + moduleName + "/";
+  options = setOptionsByBaseUrl(options, options.baseUrl);
+  options.identityServer.authorityUrl = "/" + customer + "/identity"
+  options.identityServer.authorityUrl = options.baseUrl;
+  return options;
+}
+
