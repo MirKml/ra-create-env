@@ -7,9 +7,27 @@ export function envFileConvert(
   outputFileName: string,
   options: EnvOptions,
 ) {
-  const inputLines = readFileSync(inputFileName, "utf-8").split(/\r?\n/);
+  let inputFileContent = readFileSync(inputFileName, "utf-8");
 
+  // remove multi line comments which starts on first character and starts with double **
+  // e.g
+  // /** first line
+  //  *  next line
+  //  *  next line
+  //  */
+  const multilineCommentRegex = /^\/\*\*[\s\S]*?\*\//g;
+  inputFileContent = inputFileContent.replace(multilineCommentRegex, "");
+
+  const inputLines = inputFileContent.split(/\r?\n/);
   const outputWriteStream = createWriteStream(outputFileName);
+
+  outputWriteStream.write(
+    `// =====================================================
+// THIS FILE WAS GENERATED, BE AWARE OF MANUAL EDITING!
+// =====================================================`,
+    "utf-8",
+  );
+
   let hasWriteError = false;
   for (const line of inputLines) {
     if (hasWriteError) {
@@ -40,26 +58,70 @@ function processLine(line: string, options: EnvOptions) {
     )
     .replace("<backend_build_info_url>", options.backendBuildInfoUrl || "")
     .replace("<app_config_url>", options.appConfigUrl || "")
-    .replace(/ENABLE_TEST_BANNER: [a-z]+/, "ENABLE_TEST_BANNER: " + options.enableTestBanner ? "true" : "false");
+    .replace(
+      /ENABLE_TEST_BANNER: [a-z]+/,
+      "ENABLE_TEST_BANNER: " + options.enableTestBanner ? "true" : "false",
+    );
 
   return outputLine + "\n";
 }
 
+function createDefaultOptions() {
+  return {
+    baseUrl: "",
+    apiBaseUrl: "",
+    enableTestBanner: false,
+    identityServer: {
+      appAuthBaseUrl: "",
+      authorityUrl: ""
+    },
+    swaggerUrl: ""
+  } as EnvOptions;
+}
+
 function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
+  options.baseUrl = baseUrl;
   options.apiBaseUrl = baseUrl + "web/api";
-  // api config url is used only in dustbins, will be replaced later with backend config solution
+  // app config url is used only in dustbins, will be replaced later with backend config solution
   options.appConfigUrl = baseUrl + "config.json";
   options.signalRUrl = baseUrl + "web/signalR";
   options.swaggerUrl = options.apiBaseUrl;
-  options.identityServer.appAuthBaseUrl = options.baseUrl;
+  options.identityServer.appAuthBaseUrl = baseUrl;
   return options;
 }
 
-function setOptionsbyCustomerLocal(options: EnvOptions, customer: string, moduleName: string) {
+function setOptionsbyCustomerLocal(
+  options: EnvOptions,
+  customer: string,
+  moduleName: string,
+) {
   options.baseUrl = "/" + customer + "/Modules/" + moduleName + "/";
   options = setOptionsByBaseUrl(options, options.baseUrl);
-  options.identityServer.authorityUrl = "/" + customer + "/identity"
+  options.identityServer.authorityUrl = "/" + customer + "/identity";
   options.identityServer.authorityUrl = options.baseUrl;
   return options;
 }
 
+function setOptionsSignalRMock(options: EnvOptions) {
+  options.signalRUrl = options.apiBaseUrl + "/signalR";
+  return options;
+}
+
+function setOptionsByMockServer(options: EnvOptions, suffix: string) {
+  options.baseUrl = "/";
+  // app config url is used only in dustbins, will be replaced later with backend config solution
+  options.appConfigUrl = options.baseUrl + "config-default.json";
+  options.apiBaseUrl = "/mock-server-" + suffix;
+  options.swaggerUrl = options.apiBaseUrl;
+  options.swaggerUrl = options.apiBaseUrl;
+  options = setOptionsSignalRMock(options);
+  // use local commit file for local development of backend build info
+  options.backendBuildInfoUrl = options.baseUrl + "backend-build-example.json";
+  return options;
+}
+
+function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
+  options.backendBuildInfoUrl = options.baseUrl +
+    (url ?? "backend-build-info/build-info.json");
+  return options;
+}
