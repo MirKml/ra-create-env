@@ -66,7 +66,7 @@ function processLine(line: string, options: EnvOptions) {
   return outputLine + "\n";
 }
 
-function createDefaultOptions() {
+export function createDefaultOptions() {
   return {
     baseUrl: "",
     apiBaseUrl: "",
@@ -107,7 +107,7 @@ function setOptionsSignalRMock(options: EnvOptions) {
   return options;
 }
 
-function setOptionsByMockServer(options: EnvOptions, suffix: string) {
+export function setOptionsByMockServer(options: EnvOptions, suffix: "local" | "dev") {
   options.baseUrl = "/";
   // app config url is used only in dustbins, will be replaced later with backend config solution
   options.appConfigUrl = options.baseUrl + "config-default.json";

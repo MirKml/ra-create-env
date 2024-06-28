@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write
 import { parseArgs } from "./deps.ts";
-import { envFileConvert } from "./../env-file-convert/mod.ts";
+import { createDefaultOptions, envFileConvert, setOptionsByMockServer } from "./../env-file-convert/mod.ts";
 
 function printHelp() {
   console.log(
@@ -19,7 +19,11 @@ function main() {
     Deno.exit();
   }
 
-  envFileConvert("./env-template.ts", "./env.js", {});
+
+  let options = createDefaultOptions();
+  options = setOptionsByMockServer(options, "dev");
+
+  envFileConvert("./env-template.ts", "./env.js", options);
 }
 
 main();
