@@ -128,3 +128,14 @@ function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
     (url ?? "backend-build-info/build-info.json");
   return options;
 }
+
+/**
+ * nice build options pipeline :-)
+ * @param funcs
+ * @returns (options: EnvOptions) => EnvOptions
+ */
+export function buildOptionsPipe(...funcs: ((options: EnvOptions) => EnvOptions)[]) {
+  return (value: EnvOptions) => funcs.reduce((value, fn) => {
+    return fn(value);
+  }, value);
+}
