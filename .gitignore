@@ -9,3 +9,4 @@ coverage
 
 # npm transformation result
 env-file-convert/npm
+env-file-convert/__tests__/env.js

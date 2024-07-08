@@ -21,9 +21,9 @@ function main() {
 
 
   let options = createDefaultOptions();
-  options = setOptionsByMockServer(options, "dev");
+  options = setOptionsByMockServer(options, "local");
 
-  envFileConvert("./env-template.ts", "./env.js", options);
+  envFileConvert("../env-file-convert/__tests__/env-template.ts", "../env-file-convert/__tests__/env.js", options);
 }
 
 main();

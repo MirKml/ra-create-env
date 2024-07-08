@@ -60,23 +60,23 @@ function processLine(line: string, options: EnvOptions) {
     .replace("<app_config_url>", options.appConfigUrl || "")
     .replace(
       /ENABLE_TEST_BANNER: [a-z]+/,
-      "ENABLE_TEST_BANNER: " + options.enableTestBanner ? "true" : "false",
+      "ENABLE_TEST_BANNER: " + (options.enableTestBanner ? "true" : "false"),
     );
 
   return outputLine + "\n";
 }
 
-export function createDefaultOptions() {
+export function createDefaultOptions(): EnvOptions {
   return {
     baseUrl: "",
     apiBaseUrl: "",
     enableTestBanner: false,
     identityServer: {
       appAuthBaseUrl: "",
-      authorityUrl: ""
+      authorityUrl: "",
     },
-    swaggerUrl: ""
-  } as EnvOptions;
+    swaggerUrl: "",
+  };
 }
 
 function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
@@ -107,16 +107,19 @@ function setOptionsSignalRMock(options: EnvOptions) {
   return options;
 }
 
-export function setOptionsByMockServer(options: EnvOptions, suffix: "local" | "dev") {
+export function setOptionsByMockServer(
+  options: EnvOptions,
+  suffix: "local" | "dev",
+) {
   options.baseUrl = "/";
   // app config url is used only in dustbins, will be replaced later with backend config solution
   options.appConfigUrl = options.baseUrl + "config-default.json";
   options.apiBaseUrl = "/mock-server-" + suffix;
   options.swaggerUrl = options.apiBaseUrl;
-  options.swaggerUrl = options.apiBaseUrl;
   options = setOptionsSignalRMock(options);
   // use local commit file for local development of backend build info
   options.backendBuildInfoUrl = options.baseUrl + "backend-build-example.json";
+  options.enableTestBanner = true;
   return options;
 }
 

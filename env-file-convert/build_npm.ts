@@ -34,9 +34,9 @@ await build({
 });
 
 /**
- * execute command in particular directory, Deno.Command is very unfriendly
- * especially on Windows
- * copy from dnt, thx to https://github.com/dsherret
+ * execute command in particular directory, multi platform support
+ * Deno.Command is very unfriendly especially on Windows
+ * copied from dnt, thx to https://github.com/dsherret
  * @param command
  * @param workDir
  * @returns command output
