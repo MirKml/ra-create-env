@@ -82,7 +82,7 @@ export function createDefaultOptions(): EnvOptions {
   };
 }
 
-function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
+export function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
   options.baseUrl = baseUrl;
   options.apiBaseUrl = baseUrl + "web/api";
   // app config url is used only in dustbins, will be replaced later with backend config solution
@@ -101,7 +101,6 @@ export function setOptionsByCustomerLocal(
   options.baseUrl = "/" + customer + "/Modules/" + moduleName + "/";
   options = setOptionsByBaseUrl(options, options.baseUrl);
   options.identityServer.authorityUrl = "/" + customer + "/identity";
-  options.identityServer.authorityUrl = options.baseUrl;
   return options;
 }
 
@@ -144,4 +143,8 @@ export function buildOptionsPipe(
     funcs.reduce((value, fn) => {
       return fn(value);
     }, value);
+}
+
+export function getUrlModuleSuffix(appModule: string) {
+  return "/Modules/" + appModule;
 }
