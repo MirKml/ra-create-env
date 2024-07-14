@@ -6,7 +6,7 @@ export function envFileConvert(
   inputFileName: string,
   outputFileName: string,
   options: EnvOptions,
-  afterWriting?: () => void
+  afterWriting?: () => void,
 ) {
   let inputFileContent = readFileSync(inputFileName, "utf-8");
 
@@ -46,6 +46,13 @@ export function envFileConvert(
   }
 
   outputWriteStream.end(() => afterWriting?.());
+
+  if (options.appConfigUrl != null) {
+    console.warn(
+      "warning: appConfigUrl option is obsolete, complicated, error prone\n" +
+        "  try to use backend solution for frontend application configuration",
+    );
+  }
 }
 
 function processLine(line: string, options: EnvOptions) {
