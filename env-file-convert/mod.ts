@@ -6,6 +6,7 @@ export function envFileConvert(
   inputFileName: string,
   outputFileName: string,
   options: EnvOptions,
+  afterWriting?: () => void
 ) {
   let inputFileContent = readFileSync(inputFileName, "utf-8");
 
@@ -19,7 +20,9 @@ export function envFileConvert(
   inputFileContent = inputFileContent.replace(multilineCommentRegex, "");
 
   const inputLines = inputFileContent.split(/\r?\n/);
-  const outputWriteStream = createWriteStream(outputFileName);
+  const outputWriteStream = createWriteStream(outputFileName, {
+    encoding: "utf-8",
+  });
 
   outputWriteStream.write(
     `// =====================================================
@@ -29,20 +32,20 @@ export function envFileConvert(
   );
 
   let hasWriteError = false;
+  outputWriteStream.on("error", (error) => {
+    console.error("error occurs when writing to file: ", error);
+    hasWriteError = true;
+  });
+
   for (const line of inputLines) {
     if (hasWriteError) {
       break;
     }
 
-    outputWriteStream.write(processLine(line, options), "utf8", (err) => {
-      if (err) {
-        console.error("error occurs when writing to file:", err);
-        hasWriteError = true;
-      }
-    });
+    outputWriteStream.write(processLine(line, options), "utf8");
   }
 
-  outputWriteStream.close();
+  outputWriteStream.end(() => afterWriting?.());
 }
 
 function processLine(line: string, options: EnvOptions) {
@@ -90,7 +93,7 @@ function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
   return options;
 }
 
-function setOptionsbyCustomerLocal(
+export function setOptionsByCustomerLocal(
   options: EnvOptions,
   customer: string,
   moduleName: string,
@@ -123,7 +126,7 @@ export function setOptionsByMockServer(
   return options;
 }
 
-function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
+export function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
   options.backendBuildInfoUrl = options.baseUrl +
     (url ?? "backend-build-info/build-info.json");
   return options;
@@ -134,8 +137,11 @@ function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
  * @param funcs
  * @returns (options: EnvOptions) => EnvOptions
  */
-export function buildOptionsPipe(...funcs: ((options: EnvOptions) => EnvOptions)[]) {
-  return (value: EnvOptions) => funcs.reduce((value, fn) => {
-    return fn(value);
-  }, value);
+export function buildOptionsPipe(
+  ...funcs: ((options: EnvOptions) => EnvOptions)[]
+) {
+  return (value: EnvOptions) =>
+    funcs.reduce((value, fn) => {
+      return fn(value);
+    }, value);
 }

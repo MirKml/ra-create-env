@@ -19,7 +19,6 @@ function main() {
     Deno.exit();
   }
 
-
   const options = buildOptionsPipe(
     (options) => setOptionsByMockServer(options, "local"),
   )(createDefaultOptions())  ;
