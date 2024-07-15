@@ -98,8 +98,8 @@ export function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
   return options;
 }
 
-export function enableOptionAppConfig(options: EnvOptions) {
-  options.appConfigUrl = options.baseUrl + "config.json";
+export function enableOptionAppConfig(options: EnvOptions, configFile = "config.json") {
+  options.appConfigUrl = options.baseUrl + configFile;
   return options;
 }
 

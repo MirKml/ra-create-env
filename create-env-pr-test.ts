@@ -70,7 +70,6 @@ function main() {
     .toUpperCase();
   const baseUrl = pdAppBaseUrl + getUrlModuleSuffix(appModule) + "/";
 
-  //@todo add optional appConfigUrl, is used only for some modules e.g. dustbins
   const options = buildOptionsPipe(
     (options) => setOptionsByBaseUrl(options, baseUrl),
     (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
