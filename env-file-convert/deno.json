@@ -6,6 +6,6 @@
   "tasks": {
     "cache-reload": "deno cache --reload mod.ts",
     "build-npm": "deno run -A build_npm.ts 0.1.0",
-    "test": "deno test --allow-read=__tests__ --allow-write=__tests__ __tests__"
+    "test": "deno test --allow-read=__tests__ --allow-write=__tests__ __tests__/*_test.ts"
   }
 }
