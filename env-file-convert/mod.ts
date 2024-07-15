@@ -47,7 +47,7 @@ export function envFileConvert(
 
   outputWriteStream.end(() => afterWriting?.());
 
-  if (options.appConfigUrl != null) {
+  if (options.appConfigUrl) {
     console.warn(
       "warning: appConfigUrl option is obsolete, complicated, error prone\n" +
         "  try to use backend solution for frontend application configuration",
@@ -92,11 +92,14 @@ export function createDefaultOptions(): EnvOptions {
 export function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
   options.baseUrl = baseUrl;
   options.apiBaseUrl = baseUrl + "web/api";
-  // app config url is used only in dustbins, will be replaced later with backend config solution
-  options.appConfigUrl = baseUrl + "config.json";
   options.signalRUrl = baseUrl + "web/signalR";
   options.swaggerUrl = options.apiBaseUrl;
   options.identityServer.appAuthBaseUrl = baseUrl;
+  return options;
+}
+
+export function enableOptionAppConfig(options: EnvOptions) {
+  options.appConfigUrl = options.baseUrl + "config.json";
   return options;
 }
 
@@ -121,8 +124,6 @@ export function setOptionsByMockServer(
   suffix: "local" | "dev",
 ) {
   options.baseUrl = "/";
-  // app config url is used only in dustbins, will be replaced later with backend config solution
-  options.appConfigUrl = options.baseUrl + "config-default.json";
   options.apiBaseUrl = "/mock-server-" + suffix;
   options.swaggerUrl = options.apiBaseUrl;
   options = setOptionsSignalRMock(options);

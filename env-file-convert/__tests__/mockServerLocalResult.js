@@ -55,7 +55,7 @@ window.createEnvConfig = function () {
         /**
          * application configuration
          */
-        APP_CONFIG_URL: "/config-default.json",
+        APP_CONFIG_URL: "",
     };
 };
 
