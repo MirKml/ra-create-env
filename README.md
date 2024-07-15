@@ -1,1 +1,1 @@
-Creates environment configuration for RA frontends
+Creates environment configuration for RA frontends - prototype
