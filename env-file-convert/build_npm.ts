@@ -13,6 +13,9 @@ await build({
   // typescript source also isn't important
   skipSourceOutput: true,
   typeCheck: "single",
+  // no tests
+  test: false,
+  declaration: "inline",
   package: {
     // package.json properties
     name: "@raltra/env-file-convert",
