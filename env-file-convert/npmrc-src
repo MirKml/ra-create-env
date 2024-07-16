@@ -1,0 +1,3 @@
+@raltra:registry=https://pkgs.dev.azure.com/protank/PD/_packaging/raltra/npm/registry/
+always-auth=true
+engine-strict=true

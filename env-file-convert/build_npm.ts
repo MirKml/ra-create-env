@@ -75,3 +75,6 @@ console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "./npm"));
 
 console.log("[after dnt] remove picocolors");
 console.log(runCommand(["npm", "rm", "picocolors"], "./npm"));
+
+console.log("[after dnt] copy npmrc");
+Deno.copyFileSync("./npmrc-src", "./npm/.npmrc");
