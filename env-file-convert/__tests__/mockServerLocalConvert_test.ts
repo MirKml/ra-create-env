@@ -2,7 +2,7 @@ import { assertEquals } from "@std/assert";
 import {
   buildOptionsPipe,
   createDefaultOptions,
-  envFileConvert,
+  envFileCreate,
   setOptionsByMockServer,
 } from "../mod.ts";
 
@@ -14,19 +14,18 @@ Deno.test(
       (options) => setOptionsByMockServer(options, "local"),
     )(createDefaultOptions());
 
-    envFileConvert(
-      "./__tests__/env-template.ts",
+    envFileCreate(
       "./__tests__/env.js",
       options,
-      function() {
+      undefined,
+      function () {
         const result = Deno.readTextFileSync("./__tests__/env.js");
         const expect = Deno.readTextFileSync(
           "./__tests__/mockServerLocalResult.js",
         );
         assertEquals(result, expect);
         Deno.removeSync("./__tests__/env.js");
-      }
+      },
     );
-
   },
 );

@@ -14,7 +14,7 @@ export interface EnvOptions {
     identityServer: {
         authorityUrl: string;
         appAuthBaseUrl: string;
-    }
+    };
 
     /** optional backend build info, mostly for tests environments */
     backendBuildInfoUrl?: string;
@@ -27,4 +27,85 @@ export interface EnvOptions {
      * will be moved into backend API call
      */
     appConfigUrl?: string;
+}
+
+export function createDefaultOptions(): EnvOptions {
+    return {
+        baseUrl: "",
+        apiBaseUrl: "",
+        enableTestBanner: false,
+        identityServer: {
+            appAuthBaseUrl: "",
+            authorityUrl: "",
+        },
+        swaggerUrl: "",
+    };
+}
+
+export function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
+    options.baseUrl = baseUrl;
+    options.apiBaseUrl = baseUrl + "web/api";
+    options.signalRUrl = baseUrl + "web/signalR";
+    options.swaggerUrl = options.apiBaseUrl;
+    options.identityServer.appAuthBaseUrl = baseUrl;
+    return options;
+}
+
+export function enableOptionAppConfig(
+    options: EnvOptions,
+    configFile = "config.json",
+) {
+    options.appConfigUrl = options.baseUrl + configFile;
+    return options;
+}
+
+export function setOptionsByCustomerLocal(
+    options: EnvOptions,
+    customer: string,
+    moduleName: string,
+) {
+    options.baseUrl = "/" + customer + "/Modules/" + moduleName + "/";
+    options = setOptionsByBaseUrl(options, options.baseUrl);
+    options.identityServer.authorityUrl = "/" + customer + "/identity";
+    return options;
+}
+
+function setOptionsSignalRMock(options: EnvOptions) {
+    options.signalRUrl = options.apiBaseUrl + "/signalR";
+    return options;
+}
+
+export function setOptionsByMockServer(
+    options: EnvOptions,
+    suffix: "local" | "dev",
+) {
+    options.baseUrl = "/";
+    options.apiBaseUrl = "/mock-server-" + suffix;
+    options.swaggerUrl = options.apiBaseUrl;
+    options = setOptionsSignalRMock(options);
+    // use local commit file for local development of backend build info
+    options.backendBuildInfoUrl = options.baseUrl +
+        "backend-build-example.json";
+    options.enableTestBanner = true;
+    return options;
+}
+
+export function setOptionsBackendInfoUrl(options: EnvOptions, url?: string) {
+    options.backendBuildInfoUrl = options.baseUrl +
+        (url ?? "backend-build-info/build-info.json");
+    return options;
+}
+
+/**
+ * nice build options pipeline :-)
+ * @param funcs
+ * @returns (options: EnvOptions) => EnvOptions
+ */
+export function buildOptionsPipe(
+    ...funcs: ((options: EnvOptions) => EnvOptions)[]
+) {
+    return (value: EnvOptions) =>
+        funcs.reduce((value, fn) => {
+            return fn(value);
+        }, value);
 }

@@ -1,8 +1,14 @@
+import { EnvironmentConfig } from "./EnvironmentConfig.ts";
+
+declare global {
+    function createEnvConfig(): EnvironmentConfig;
+}
+
 /**
  * Strong typed environment configuration template.
  * It's processed and finished as the the env.js, which is used in the main application html.
  */
-window.createEnvConfig = function () {
+globalThis.createEnvConfig = function () {
     return {
         /**
          * frontend application base url

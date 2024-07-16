@@ -1,14 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write
 import { parseArgs } from "jsr:@std/cli@^0.224.3";
-import {
-  buildOptionsPipe,
-  createDefaultOptions,
-  enableOptionAppConfig,
-  envFileConvert,
-  getUrlModuleSuffix,
-  setOptionsBackendInfoUrl,
-  setOptionsByBaseUrl,
-} from "./env-file-convert/mod.ts";
+import { createEnvPrTest } from "./env-file-convert/mod.ts";
 
 function printHelp() {
   console.log(
@@ -21,7 +13,7 @@ function printHelp() {
       '--customer <name>: mandatory - customer name mandatory - e.g. "sako"\n' +
       '--app-module <name>: mandatory - module name e.g. "crm"\n' +
       '--pull-request-id <id>: mandatory - pull request identifier e.g. "1294"\n' +
-      '--enable-app-config: enable customer application configuration (will be deprecated), default disabled\n',
+      "--enable-app-config: enable customer application configuration (will be deprecated), default disabled\n",
   );
 }
 
@@ -29,7 +21,7 @@ function main() {
   const args = parseArgs(Deno.args, {
     alias: { "h": "help" },
     boolean: ["help", "enable-app-config"],
-    string: ["base-url", "customer", "app-module", "pull-request-id"],
+    string: ["base-url-suffix", "customer", "app-module", "pull-request-id"],
   });
 
   if (args.help) {
@@ -59,34 +51,12 @@ function main() {
   }
   const enableAppConfig = args["enable-app-config"];
 
-  if (!pullRequestId) {
-    console.error("pull-request-id options is mandatory, see --help");
-    Deno.exit(1);
-  }
-
-  // base url must be without "prid" suffix before setOptionsByBaseUrl is called
-  // "prid" suffix is presented only in baseUrl, isn't in api url, and other urls
-  const pdAppBaseUrl = `/${customer}_${baseUrlSuffix}`.replace("-", "_")
-    .toUpperCase();
-  const baseUrl = pdAppBaseUrl + getUrlModuleSuffix(appModule) + "/";
-
-  const options = buildOptionsPipe(
-    (options) => setOptionsByBaseUrl(options, baseUrl),
-    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
-    (options) => {
-      options.identityServer.authorityUrl = pdAppBaseUrl + "/identity";
-      //add "prid" - pull request id - suffix
-      options.baseUrl += `prid-${pullRequestId}/`;
-      options.enableTestBanner = true;
-      return options;
-    },
-    (options) => setOptionsBackendInfoUrl(options),
-  )(createDefaultOptions());
-
-  envFileConvert(
-    "env-file-convert/__tests__/env-template.ts",
-    "env-file-convert/__tests__/env.js",
-    options,
+  createEnvPrTest(
+    baseUrlSuffix,
+    customer,
+    appModule,
+    pullRequestId,
+    enableAppConfig,
   );
 }
 

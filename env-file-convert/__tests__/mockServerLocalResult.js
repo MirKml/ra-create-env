@@ -1,7 +1,7 @@
 // =====================================================
 // THIS FILE WAS GENERATED, BE AWARE OF MANUAL EDITING!
 // =====================================================
-window.createEnvConfig = function () {
+globalThis.createEnvConfig = function () {
     return {
         /**
          * frontend application base url
