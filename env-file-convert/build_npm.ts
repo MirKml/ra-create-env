@@ -17,7 +17,7 @@ await build({
     // package.json properties
     name: "@raltra/env-file-convert",
     version: Deno.args[0],
-    description: "Your package.",
+    description: "environment configuration builder",
     license: "MIT",
     repository: {
       type: "git",
