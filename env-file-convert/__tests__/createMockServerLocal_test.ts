@@ -12,7 +12,10 @@ Deno.test(
   () => {
     const options = buildOptionsPipe(
       (options) => setOptionsByMockServer(options, "local"),
-    )(createDefaultOptions());
+    )(createDefaultOptions(
+      "pd3.waste.js.client",
+      "openid profile offline_access email roles pd1_identity_resource pd3_waste_apigateway",
+    ));
 
     envFileCreate(
       "./__tests__/env.js",
@@ -21,7 +24,7 @@ Deno.test(
       function () {
         const result = Deno.readTextFileSync("./__tests__/env.js");
         const expect = Deno.readTextFileSync(
-          "./__tests__/mockServerLocalResult.js",
+          "./__tests__/createMockServerLocalResult.js",
         );
         assertEquals(result, expect);
         Deno.removeSync("./__tests__/env.js");

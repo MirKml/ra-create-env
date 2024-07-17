@@ -83,6 +83,8 @@ function processLine(line: string, options: EnvOptions) {
       "<id_server_app_auth_base_url>",
       options.identityServer.appAuthBaseUrl,
     )
+    .replace("<id_server_client_id>", options.identityServer.clientId)
+    .replace("<id_server_scope>", options.identityServer.scope)
     .replace("<backend_build_info_url>", options.backendBuildInfoUrl || "")
     .replace("<app_config_url>", options.appConfigUrl || "")
     .replace(
@@ -98,11 +100,15 @@ export function getUrlModuleSuffix(appModule: string) {
 }
 
 export function createEnvPrTest(
+  outputFile: string,
   baseUrlSuffix: string,
   customer: string,
   appModule: string,
   pullRequestId: string,
+  identityClientId: string,
+  identityScope: string,
   enableAppConfig = false,
+  afterWriting?: () => void,
 ) {
   // base url must be without "prid" suffix before setOptionsByBaseUrl is called
   // "prid" suffix is presented only in baseUrl, isn't in api url, and other urls
@@ -121,10 +127,12 @@ export function createEnvPrTest(
       return options;
     },
     (options) => setOptionsBackendInfoUrl(options),
-  )(createDefaultOptions());
+  )(createDefaultOptions(identityClientId, identityScope));
 
   envFileCreate(
-    "env-file-convert/__tests__/env.js",
+    outputFile,
     options,
+    undefined,
+    afterWriting,
   );
 }

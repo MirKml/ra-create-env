@@ -10,7 +10,10 @@ Deno.test("setOptionsByMockServer test", () => {
   const options = buildOptionsPipe(
     (options) => setOptionsByMockServer(options, "local"),
     (options) => enableOptionAppConfig(options, "config-default.json"),
-  )(createDefaultOptions());
+  )(createDefaultOptions(
+    "pd3.waste.js.client",
+    "openid profile",
+  ));
 
   assertEquals(options.baseUrl, "/");
   assertEquals(options.apiBaseUrl, "/mock-server-local");

@@ -1,40 +1,33 @@
-import { EnvironmentConfig } from "./EnvironmentConfig.ts";
-
-declare global {
-    function createEnvConfig(): EnvironmentConfig;
-}
-
-/**
- * Strong typed environment configuration template.
- * It's processed and finished as the the env.js, which is used in the main application html.
- */
+// =====================================================
+// THIS FILE WAS GENERATED, BE AWARE OF MANUAL EDITING!
+// =====================================================
 globalThis.createEnvConfig = function () {
     return {
         /**
          * frontend application base url
          */
-        BASE_URL: "<base_url>",
+        BASE_URL: "/SAKO_TEST/Modules/crm/prid-1543/",
 
         /**
          * base api url, it's prefix for all api calls
          */
-        API_BASE_URL: "<api_base_url>",
+        API_BASE_URL: "/SAKO_TEST/Modules/crm/web/api",
 
         /**
          * url for log server
          */
-        LOG_SERVER_URL: "<log_server_url>",
+        LOG_SERVER_URL: "",
 
         /**
          * signalR base URL
          */
-        SIGNAL_R_URL: "<signal_r_url>",
+        SIGNAL_R_URL: "/SAKO_TEST/Modules/crm/web/signalR",
 
         /**
          * swagger url for backend services
          * supported prefixes:
          */
-        SWAGGER_URL: "<swagger_url>",
+        SWAGGER_URL: "/SAKO_TEST/Modules/crm/web/api",
 
         /**
          * identity server config (user login)
@@ -42,17 +35,17 @@ globalThis.createEnvConfig = function () {
         IDENTITY_SERVER: {
             // if authority url is empty, then dummy authenticator is used
             // this is useful for frontend only development environments - dev, pr dev
-            AUTHORITY_URL: "<id_server_authority_url>",
-            CLIENT_ID: "<id_server_client_id>",
-            SCOPE: "<id_server_scope>",
-            APP_AUTH_BASE_URL: "<id_server_app_auth_base_url>",
+            AUTHORITY_URL: "/SAKO_TEST/identity",
+            CLIENT_ID: "pd3.waste.js.client",
+            SCOPE: "openid profile offline_access email roles pd1_identity_resource pd3_waste_apigateway",
+            APP_AUTH_BASE_URL: "/SAKO_TEST/Modules/crm/",
         },
 
         /*
          * backend info config url, complete url, it's after base_url
          * can be empty string
          */
-        BACKEND_BUILD_INFO_URL: "<backend_build_info_url>",
+        BACKEND_BUILD_INFO_URL: "/SAKO_TEST/Modules/crm/prid-1543/backend-build-info/build-info.json",
 
         /*
          * enable top banner which highlights test environment
@@ -62,6 +55,7 @@ globalThis.createEnvConfig = function () {
         /**
          * application configuration
          */
-        APP_CONFIG_URL: "<app_config_url>",
+        APP_CONFIG_URL: "/SAKO_TEST/Modules/crm/config.json",
     };
 };
+

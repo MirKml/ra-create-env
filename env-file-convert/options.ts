@@ -13,6 +13,8 @@ export interface EnvOptions {
 
     identityServer: {
         authorityUrl: string;
+        clientId: string;
+        scope: string;
         appAuthBaseUrl: string;
     };
 
@@ -29,13 +31,15 @@ export interface EnvOptions {
     appConfigUrl?: string;
 }
 
-export function createDefaultOptions(): EnvOptions {
+export function createDefaultOptions(identityClientId: string, identityScope: string): EnvOptions {
     return {
         baseUrl: "",
         apiBaseUrl: "",
         enableTestBanner: false,
         identityServer: {
             appAuthBaseUrl: "",
+            clientId: identityClientId,
+            scope: identityScope,
             authorityUrl: "",
         },
         swaggerUrl: "",
