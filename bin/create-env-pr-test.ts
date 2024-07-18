@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write
 import { parseArgs } from "jsr:@std/cli@^0.224.3";
-import { createEnvPrTest } from "../env-file-convert/mod.ts";
+import { createEnvPrTest } from "../mod.ts";
 
 function printHelp() {
   console.log(

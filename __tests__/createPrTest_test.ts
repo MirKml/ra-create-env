@@ -17,7 +17,7 @@ Deno.test(
       function () {
         const result = Deno.readTextFileSync("./__tests__/env.js");
         const expect = Deno.readTextFileSync(
-          "./__tests__/createPrTestResult.js",
+          "./__tests__/assert-expects/prTest.js",
         );
         assertEquals(result, expect);
         Deno.removeSync("./__tests__/env.js");

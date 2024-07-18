@@ -9,10 +9,6 @@ import {
   setOptionsByBaseUrl,
 } from "./options.ts";
 
-export type { EnvironmentConfig } from "./EnvironmentConfig.ts";
-export { buildOptionsPipe, createDefaultOptions, enableOptionAppConfig };
-export { setOptionsByMockServer } from "./options.ts";
-
 export function envFileCreate(
   outputFileName: string,
   options: EnvOptions,

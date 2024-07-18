@@ -1,10 +1,10 @@
 import { build, emptyDir } from "@deno/dnt";
 
-await emptyDir("./npm");
+await emptyDir("../npm");
 
 await build({
   entryPoints: ["./mod.ts"],
-  outDir: "./npm",
+  outDir: "../npm",
   shims: {
     deno: "dev",
   },
@@ -18,9 +18,9 @@ await build({
   declaration: "inline",
   package: {
     // package.json properties
-    name: "@raltra/env-file-convert",
+    name: "@raltra/env-config",
     version: Deno.args[0],
-    description: "environment configuration builder",
+    description: "environment configuration tools",
     license: "MIT",
     repository: {
       type: "git",
@@ -70,11 +70,11 @@ function runCommand(command: string[], workDir: string) {
 }
 
 console.log("[after dnt] @types/node as devDependencies only");
-console.log(runCommand(["npm", "rm", "@types/node"], "./npm"));
-console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "./npm"));
+console.log(runCommand(["npm", "rm", "@types/node"], "../npm"));
+console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "../npm"));
 
 console.log("[after dnt] remove picocolors");
-console.log(runCommand(["npm", "rm", "picocolors"], "./npm"));
+console.log(runCommand(["npm", "rm", "picocolors"], "../npm"));
 
 console.log("[after dnt] copy npmrc");
-Deno.copyFileSync("./npmrc-src", "./npm/.npmrc");
+Deno.copyFileSync("./npmrc-src", "../npm/.npmrc");

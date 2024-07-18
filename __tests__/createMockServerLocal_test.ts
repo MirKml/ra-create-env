@@ -24,7 +24,7 @@ Deno.test(
       function () {
         const result = Deno.readTextFileSync("./__tests__/env.js");
         const expect = Deno.readTextFileSync(
-          "./__tests__/createMockServerLocalResult.js",
+          "./__tests__/assert-expects/mockServerLocal.js",
         );
         assertEquals(result, expect);
         Deno.removeSync("./__tests__/env.js");
