@@ -29,7 +29,7 @@ function printHelp() {
       "--app-module crm \\\n" +
       "--pull-request-id 14532 \\\n" +
       "--enable-app-config \\\n" +
-      "--output env-file-convert/__tests__/env.js",
+      "--output __tests__/env.js",
   );
 }
 

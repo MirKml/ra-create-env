@@ -1,10 +1,12 @@
 import { build, emptyDir } from "@deno/dnt";
 
-await emptyDir("../npm");
+// be aware this file is executed via deno task from project root
+// so all relative path are relative to project root
+await emptyDir("./npm");
 
 await build({
   entryPoints: ["./mod.ts"],
-  outDir: "../npm",
+  outDir: "./npm",
   shims: {
     deno: "dev",
   },
@@ -70,11 +72,11 @@ function runCommand(command: string[], workDir: string) {
 }
 
 console.log("[after dnt] @types/node as devDependencies only");
-console.log(runCommand(["npm", "rm", "@types/node"], "../npm"));
-console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "../npm"));
+console.log(runCommand(["npm", "rm", "@types/node"], "./npm"));
+console.log(runCommand(["npm", "install", "-D", "@types/node@^20.*"], "./npm"));
 
 console.log("[after dnt] remove picocolors");
-console.log(runCommand(["npm", "rm", "picocolors"], "../npm"));
+console.log(runCommand(["npm", "rm", "picocolors"], "./npm"));
 
 console.log("[after dnt] copy npmrc");
-Deno.copyFileSync("./npmrc-src", "../npm/.npmrc");
+Deno.copyFileSync("./scripts/npmrc-src", "./npm/.npmrc");
