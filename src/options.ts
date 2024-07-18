@@ -74,7 +74,7 @@ export function setOptionsByCustomerLocal(
     return options;
 }
 
-function setOptionsSignalRMock(options: EnvOptions) {
+export function setOptionsSignalRMock(options: EnvOptions) {
     options.signalRUrl = options.apiBaseUrl + "/signalR";
     return options;
 }

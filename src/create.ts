@@ -7,6 +7,7 @@ import {
   type EnvOptions,
   setOptionsBackendInfoUrl,
   setOptionsByBaseUrl,
+  setOptionsSignalRMock,
 } from "./options.ts";
 
 export function envFileCreate(
@@ -95,6 +96,9 @@ export function getUrlModuleSuffix(appModule: string) {
   return "/Modules/" + appModule;
 }
 
+/**
+ * creates environment config pull request test webs - with real backend test API
+ */
 export function createEnvPrTest(
   outputFile: string,
   baseUrlSuffix: string,
@@ -114,7 +118,6 @@ export function createEnvPrTest(
 
   const options = buildOptionsPipe(
     (options) => setOptionsByBaseUrl(options, baseUrl),
-    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
     (options) => {
       options.identityServer.authorityUrl = pdAppBaseUrl + "/identity";
       //add "prid" - pull request id - suffix
@@ -123,7 +126,42 @@ export function createEnvPrTest(
       return options;
     },
     (options) => setOptionsBackendInfoUrl(options),
+    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
   )(createDefaultOptions(identityClientId, identityScope));
+
+  envFileCreate(
+    outputFile,
+    options,
+    undefined,
+    afterWriting,
+  );
+}
+
+/**
+ * creates environment config for frontend only devs webs, include pull request devs
+ * @param baseUrl base url in format /url/path/
+ */
+export function createEnvDev(outputFile: string, baseUrl: string,
+  enableAppConfig = false,
+  afterWriting?: () => void
+) {
+  const options = buildOptionsPipe(
+    (options) => {
+      options.baseUrl = baseUrl;
+      options.apiBaseUrl = baseUrl + "mock-api";
+      options.swaggerUrl = options.apiBaseUrl;
+      options.enableTestBanner = true;
+      // no identity for frontend dev only apps
+      options.identityServer.authorityUrl = "";
+      options.identityServer.appAuthBaseUrl = "";
+      // no backend build info, logs
+      options.backendBuildInfoUrl = "";
+      options.logServerUrl = "";
+      return options;
+    },
+    (options) => setOptionsSignalRMock(options),
+    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
+  )(createDefaultOptions("frontend.dev.identity", "frontend dev scope"));
 
   envFileCreate(
     outputFile,

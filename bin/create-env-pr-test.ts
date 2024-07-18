@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write
-import { parseArgs } from "jsr:@std/cli@^0.224.3";
+import { parseArgs } from "./deps.ts";
 import { createEnvPrTest } from "../mod.ts";
 
 function printHelp() {
@@ -55,37 +55,37 @@ function main() {
 
   const outputFile = args.output;
   if (!outputFile) {
-    console.error("output suffix options is mandatory, see --help");
+    console.error("--output options is mandatory, see --help");
     Deno.exit(1);
   }
   const baseUrlSuffix = args["base-url-suffix"];
   if (!baseUrlSuffix) {
-    console.error("base-url-suffix options is mandatory, see --help");
+    console.error("--base-url-suffix options is mandatory, see --help");
     Deno.exit(1);
   }
   const customer = args.customer;
   if (!customer) {
-    console.error("customer options is mandatory, see --help");
+    console.error("--customer options is mandatory, see --help");
     Deno.exit(1);
   }
   const appModule = args["app-module"];
   if (!appModule) {
-    console.error("app-module options is mandatory, see --help");
+    console.error("--app-module options is mandatory, see --help");
     Deno.exit(1);
   }
   const pullRequestId = args["pull-request-id"];
   if (!pullRequestId) {
-    console.error("pull-request-id options is mandatory, see --help");
+    console.error("--pull-request-id options is mandatory, see --help");
     Deno.exit(1);
   }
   const identityClientId = args["identity-client-id"];
   if (!identityClientId) {
-    console.error("identity-client-id options is mandatory, see --help");
+    console.error("--identity-client-id options is mandatory, see --help");
     Deno.exit(1);
   }
   const identityScope = args["identity-scope"];
   if (!identityScope) {
-    console.error("identity-scope options is mandatory, see --help");
+    console.error("--identity-scope options is mandatory, see --help");
     Deno.exit(1);
   }
 
