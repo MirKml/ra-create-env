@@ -9,13 +9,15 @@ function printHelp() {
       "mandatory options:\n" +
       "--output <file>: output file\n" +
       "--base-url <url>: base url, format like /url/path/ \n" +
+      "    double slashes // are replaced with single /, because of path mangling in msys2 windows\n" +
+      "    see notice at the end of help\n" +
       "\n" +
       "optional options:\n" +
       "--enable-app-config: enable customer application configuration (will be deprecated)",
   );
   console.log(
     "\nexample:\n" +
-      "bin/create-env-dev.ts --base-url /frontend-dev/dustbins/ \\\n" +
+      "bin/create-env-dev.ts --base-url //frontend-dev/dustbins/ \\\n" +
       "--enable-app-config \\\n" +
       "--output __tests__/env.js",
   );
@@ -45,14 +47,13 @@ function main() {
     console.error("--output options is mandatory, see --help");
     Deno.exit(1);
   }
-  const baseUrl = args["base-url"];
+  const baseUrl = args["base-url"]?.replace("//", "/");
   if (!baseUrl) {
     console.error("--base-url options is mandatory, see --help");
     Deno.exit(1);
   }
 
   const enableAppConfig = args["enable-app-config"];
-  console.log(baseUrl);
   createEnvDev(
     outputFile,
     baseUrl,
