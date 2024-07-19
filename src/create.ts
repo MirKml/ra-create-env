@@ -52,7 +52,7 @@ export function envFileCreate(
     }
     if (!startProcessing) continue;
 
-    // don't add newline after processed line, then resulted file will contains one extra \n
+    // important to add newline after processed line, otherwise resulted file will contains one extra \n
     outputWriteStream.write("\n", "utf-8");
     outputWriteStream.write(processLine(line, options), "utf8");
   }
