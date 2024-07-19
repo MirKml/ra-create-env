@@ -1,7 +1,7 @@
 export {
   buildOptionsPipe,
   createDefaultOptions,
-  enableOptionAppConfig,
+  setOptionsAppConfig,
   setOptionsByMockServer,
 } from "./src/options.ts";
 export { createEnvDev, createEnvPrTest, envFileCreate } from "./src/create.ts";

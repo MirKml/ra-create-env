@@ -2,14 +2,14 @@ import { assertEquals } from "@std/assert";
 import {
   buildOptionsPipe,
   createDefaultOptions,
-  enableOptionAppConfig,
+  setOptionsAppConfig,
   setOptionsByMockServer,
 } from "../mod.ts";
 
 Deno.test("setOptionsByMockServer test", () => {
   const options = buildOptionsPipe(
     (options) => setOptionsByMockServer(options, "local"),
-    (options) => enableOptionAppConfig(options, "config-default.json"),
+    (options) => setOptionsAppConfig(options, "config-default.json"),
   )(createDefaultOptions(
     "pd3.waste.js.client",
     "openid profile",

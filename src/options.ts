@@ -55,7 +55,7 @@ export function setOptionsByBaseUrl(options: EnvOptions, baseUrl: string) {
     return options;
 }
 
-export function enableOptionAppConfig(
+export function setOptionsAppConfig(
     options: EnvOptions,
     configFile = "config.json",
 ) {

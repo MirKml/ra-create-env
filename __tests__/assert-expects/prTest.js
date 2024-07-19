@@ -58,4 +58,3 @@ globalThis.createEnvConfig = function () {
         APP_CONFIG_URL: "/SAKO_TEST/Modules/crm/config.json",
     };
 };
-

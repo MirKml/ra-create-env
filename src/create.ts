@@ -3,7 +3,7 @@ import { createWriteStream, readFileSync } from "node:fs";
 import {
   buildOptionsPipe,
   createDefaultOptions,
-  enableOptionAppConfig,
+  setOptionsAppConfig,
   type EnvOptions,
   setOptionsBackendInfoUrl,
   setOptionsByBaseUrl,
@@ -35,8 +35,7 @@ export function envFileCreate(
   outputWriteStream.write(
     `// =====================================================
 // THIS FILE WAS GENERATED, BE AWARE OF MANUAL EDITING!
-// =====================================================
-`,
+// =====================================================`,
     "utf-8",
   );
 
@@ -53,6 +52,8 @@ export function envFileCreate(
     }
     if (!startProcessing) continue;
 
+    // don't add newline after processed line, then resulted file will contains one extra \n
+    outputWriteStream.write("\n", "utf-8");
     outputWriteStream.write(processLine(line, options), "utf8");
   }
 
@@ -67,8 +68,7 @@ export function envFileCreate(
 }
 
 function processLine(line: string, options: EnvOptions) {
-  // keep empty lines as is
-  if (line.trim().length === 0) return "\n";
+  if (line.trim().length === 0) return "";
 
   const outputLine = line.replace("<base_url>", options.baseUrl)
     .replace("<api_base_url>", options.apiBaseUrl)
@@ -89,7 +89,7 @@ function processLine(line: string, options: EnvOptions) {
       "ENABLE_TEST_BANNER: " + (options.enableTestBanner ? "true" : "false"),
     );
 
-  return outputLine + "\n";
+  return outputLine;
 }
 
 export function getUrlModuleSuffix(appModule: string) {
@@ -118,6 +118,8 @@ export function createEnvPrTest(
 
   const options = buildOptionsPipe(
     (options) => setOptionsByBaseUrl(options, baseUrl),
+    // necessary to set before baseUrl change in next function
+    (options) => enableAppConfig ? setOptionsAppConfig(options) : options,
     (options) => {
       options.identityServer.authorityUrl = pdAppBaseUrl + "/identity";
       //add "prid" - pull request id - suffix
@@ -126,7 +128,6 @@ export function createEnvPrTest(
       return options;
     },
     (options) => setOptionsBackendInfoUrl(options),
-    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
   )(createDefaultOptions(identityClientId, identityScope));
 
   envFileCreate(
@@ -160,7 +161,7 @@ export function createEnvDev(outputFile: string, baseUrl: string,
       return options;
     },
     (options) => setOptionsSignalRMock(options),
-    (options) => enableAppConfig ? enableOptionAppConfig(options) : options,
+    (options) => enableAppConfig ? setOptionsAppConfig(options) : options,
   )(createDefaultOptions("frontend.dev.identity", "frontend dev scope"));
 
   envFileCreate(
